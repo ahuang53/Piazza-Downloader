@@ -3,9 +3,9 @@ import os
 import json
 import re
 import requests
+
 from piazza_api import Piazza
 from piazza_api.rpc import PiazzaRPC
-
 from piazza_api.exceptions import AuthenticationError, NotAuthenticatedError, \
     RequestError
 
@@ -74,7 +74,7 @@ def download(email, password, sections):
             
              # Check if the request was successful
             if page_response_obj.status_code == 200:
-                pdf_filename = os.path.join(final_directory, f"{item[0]}.pdf")
+                pdf_filename = os.path.join(final_directory, item[0])
                 # Write the PDF content to a file
                 with open(pdf_filename, 'wb') as pdf_file:
                     pdf_file.write(page_response_obj.content)
@@ -90,6 +90,7 @@ if __name__ == "__main__":
     
     username = input("Email: ")
     password = input("Password: ")
+    resourcesFile = input("Enter the name of the resources file (example = resources.html): ")
 
     p.user_login(username,password)
     classes = p.get_user_classes()
@@ -101,7 +102,7 @@ if __name__ == "__main__":
     classID = classes[idx]['nid']
     
     #use pyquery to access the resources file
-    doc = pq(filename = 'resources.html')
+    doc = pq(filename = resourcesFile)
     script_content = doc('script').text()
     resources_json_str = re.search(r'var RESOURCES = (\[.*?\]);', script_content, re.DOTALL).group(1)
     json_object = json.loads(resources_json_str)
@@ -113,6 +114,8 @@ if __name__ == "__main__":
     sections = {}
 
     for item in json_object:
+        if item['subject'][-3:] != "pdf" or item['config']['resource_type'] != "file":
+            continue
         #section type
         sectionKey = item['config']['section']
         
