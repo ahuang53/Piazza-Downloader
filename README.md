@@ -11,6 +11,10 @@ Install Piazza API https://github.com/hfaran/piazza-api and any other missing li
 5. Run main.py and all files will be in the downloaded_resources folder
 Make sure to choose the correct course that you are downloading as different courses will have different resources.html files. 
 
+If you don't want to login in repeatedly, go to line 91 in the code (under main), and fill in your email and password.
+
+When asked, "Which class are you downloading from:", input which number the class corresponds to not, not the title of the course.
+
 Some of the section names may be named incorrectly so review the folders and modify to your liking. 
 
 ## Disclaimer for Unofficial Piazza Downloader
